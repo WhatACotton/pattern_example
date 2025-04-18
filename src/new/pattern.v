@@ -31,7 +31,7 @@ module pattern (
     output reg VGA_DE,
     output PCK
 );
-  `include "vga_param.v"
+  `include "vga_param.sv"
 
   localparam HSIZE = 10'd64;
   localparam VSIZE = 10'd120;

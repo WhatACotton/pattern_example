@@ -2,18 +2,21 @@
 set top_module_name pattern_hdmi
 set outputDir ./synth_tmp
 file mkdir $outputDir
-set_property top top [current_fileset]
-set_property top pattern_tb [current_fileset -simset]
+
 
 set_part xc7z020clg400-1
 # step#1: Setup design sources and constraints.
 read_verilog [ glob ./src/new/*.v ]
+read_verilog [ glob ./src/tb/*.v ]
 read_verilog -sv [ glob ./src/new/*.sv ]
-read_xdc ./src/const/pattern.xdc
-read_vhd [ glob ./src/imports/src/*.vhd ]
-# set rgb2dvi to library top module
-set_property top rgb2dvi [current_fileset -simset]
 
+read_xdc ./src/const/pattern.xdc
+read_vhd -library xil_defaultlib [ glob ./src/imports/src/lib/*.vhd ]
+read_vhd ./src/imports/src/rgb2dvi.vhd
+
+set_property top top [current_fileset]
+set_property top pattern_tb [current_fileset -simset]
+# 
 #read_verilog [ glob ./ip/pll/*.v ]
 
 # step#2: Run synthesis, report utilization and timing estimates, write checkpoint design.
@@ -49,18 +52,5 @@ report_drc -file $outputDir/post_imp_drc.rpt
 write_verilog -force $outputDir/top_impl_netlist.v
 write_xdc -no_fixed_only -force $outputDir/top_impl.xdc
 
-# step#5: Generate a bitstream.
-write_bitstream -force $outputDir/$top_module_name.bit
-
-
-# step6
-#open_hw
-#open_hw_target
-#current_hw_device [get_hw_devices xc7z020_1]
-#refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
-
-#set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
-#set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
-
-#set_property PROGRAM.FILE {$outputDir/top.bit} [get_hw_devices xc7z020_1]
-#program_hw_devices [get_hw_devices xc7z020_1]
+update_compile_order -fileset sim_1
+export_simulation -force -simulator xsim -directory ./post_route -runtime 20000000ns

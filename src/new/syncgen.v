@@ -30,7 +30,7 @@ module syncgen (
     output reg [9:0] VCNT
 );
 
-  `include "vga_param.v"
+  `include "vga_param.sv"
 
 pckgen pckgen (
       .SYSCLK(CLK),

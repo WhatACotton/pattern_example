@@ -1,1 +1,4 @@
 synth_tmp/
+post_route/
+.Xil/
+.ip_user_files/
