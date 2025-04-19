@@ -8,7 +8,6 @@ set_part xc7z020clg400-1
 # step#1: Setup design sources and constraints.
 read_verilog -sv [ glob ./src/new/*.sv ]
 read_verilog -sv [ glob ./src/tb/*.sv ]
-read_verilog -sv [ glob ./src/new/*.sv ]
 
 read_xdc ./src/const/pattern.xdc
 read_vhd -library xil_defaultlib [ glob ./src/imports/src/lib/*.vhd ]
@@ -53,4 +52,6 @@ write_verilog -force $outputDir/top_impl_netlist.v
 write_xdc -no_fixed_only -force $outputDir/top_impl.xdc
 
 update_compile_order -fileset sim_1
+set_property top pattern_tb [current_fileset -simset]
+
 export_simulation -force -simulator xsim -directory ./post_route -runtime 20000000ns -define SYNTHESIS
