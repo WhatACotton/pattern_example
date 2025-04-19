@@ -1,3 +1,7 @@
+`ifndef SYNTHESIS
+`include "../new/pattern.sv"
+`endif
+
 module pattern_tb;
   localparam STEP = 8;
   localparam CLKNUM = (800 * 525 + 12000) * 500;
