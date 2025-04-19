@@ -4,6 +4,9 @@
 /* outline: ピクセルクロック生成      */
 /*          125MHz入力、25.175MHz出力 */
 
+`ifndef SYNTHESIS
+`include "../imports/src/rgb2dvi.vhd"
+`endif
 module pckgen (
     input  SYSCLK,
     output PCK

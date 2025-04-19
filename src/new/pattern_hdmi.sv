@@ -20,6 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
+`ifndef SYNTHESIS
+`include "pattern.sv"
+`include "../imports/src/rgb2dvi.vhd"
+`endif
+
 module pattern_hdmi (
     input CLK,
     input RST,

@@ -6,8 +6,8 @@ file mkdir $outputDir
 
 set_part xc7z020clg400-1
 # step#1: Setup design sources and constraints.
-read_verilog [ glob ./src/new/*.v ]
-read_verilog [ glob ./src/tb/*.v ]
+read_verilog -sv [ glob ./src/new/*.sv ]
+read_verilog -sv [ glob ./src/tb/*.sv ]
 read_verilog -sv [ glob ./src/new/*.sv ]
 
 read_xdc ./src/const/pattern.xdc
@@ -22,7 +22,7 @@ set_property top pattern_tb [current_fileset -simset]
 # step#2: Run synthesis, report utilization and timing estimates, write checkpoint design.
 synth_ip [get_ips pll] -force
 
-synth_design -top $top_module_name    
+synth_design -top $top_module_name -verilog_define SYNTHESIS
 write_checkpoint -force $outputDir/post_synth
 report_timing_summary -file $outputDir/post_synth_timing_summary.rpt
 report_power -file $outputDir/post_synth_power.rpt
@@ -53,4 +53,4 @@ write_verilog -force $outputDir/top_impl_netlist.v
 write_xdc -no_fixed_only -force $outputDir/top_impl.xdc
 
 update_compile_order -fileset sim_1
-export_simulation -force -simulator xsim -directory ./post_route -runtime 20000000ns
+export_simulation -force -simulator xsim -directory ./post_route -runtime 20000000ns -define SYNTHESIS

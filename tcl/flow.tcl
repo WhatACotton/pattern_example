@@ -2,24 +2,26 @@
 set top_module_name pattern_hdmi
 set outputDir ./synth_tmp
 file mkdir $outputDir
-set_property top top [current_fileset]
-set_property top pattern_tb [current_fileset -simset]
 
 set_part xc7z020clg400-1
 # step#1: Setup design sources and constraints.
-read_verilog [ glob ./src/new/*.v ]
 read_verilog -sv [ glob ./src/new/*.sv ]
-read_xdc ./src/const/pattern.xdc
-read_vhd [ glob ./src/imports/src/*.vhd ]
-# set rgb2dvi to library top module
-set_property top rgb2dvi [current_fileset -simset]
+read_verilog -sv [ glob ./src/tb/*.sv ]
+read_verilog -sv [ glob ./src/new/*.sv ]
 
+read_xdc ./src/const/pattern.xdc
+read_vhd -library xil_defaultlib [ glob ./src/imports/src/lib/*.vhd ]
+read_vhd ./src/imports/src/rgb2dvi.vhd
+
+set_property top top [current_fileset]
+set_property top pattern_tb [current_fileset -simset]
+# 
 #read_verilog [ glob ./ip/pll/*.v ]
 
 # step#2: Run synthesis, report utilization and timing estimates, write checkpoint design.
 synth_ip [get_ips pll] -force
 
-synth_design -top $top_module_name    
+synth_design -top $top_module_name -verilog_define SYNTHESIS
 write_checkpoint -force $outputDir/post_synth
 report_timing_summary -file $outputDir/post_synth_timing_summary.rpt
 report_power -file $outputDir/post_synth_power.rpt
@@ -49,6 +51,7 @@ report_drc -file $outputDir/post_imp_drc.rpt
 write_verilog -force $outputDir/top_impl_netlist.v
 write_xdc -no_fixed_only -force $outputDir/top_impl.xdc
 
+update_compile_order -fileset sim_1
 # step#5: Generate a bitstream.
 write_bitstream -force $outputDir/$top_module_name.bit
 

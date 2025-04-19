@@ -1,0 +1,11 @@
+{
+    "verilog.linting.linter": "iverilog",
+    "verilog.linting.iverilog.runAtFileLocation": true,
+    "verilog.formatting.verilogFormat.path": "/opt/verilog-format/verilog-format",
+    "verilog.formatting.verilogHDL.formatter": "verilog-format",
+    "verilog.runInTerminal": true,
+    "verilog.linting.iverilog.includePath": [
+        "./src/new/*.sv"
+    ],
+
+}

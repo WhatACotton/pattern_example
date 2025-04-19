@@ -4,14 +4,12 @@ module pattern_tb;
   localparam WIDTH = 800;
   localparam HEIGHT = 525;
   localparam BMP_HEADER_SIZE = 54;
-
   integer fd;
   reg CLK;
   reg RST;
   wire [7:0] VGA_R, VGA_G, VGA_B;
   wire VGA_HS, VGA_VS, VGA_DE;
   wire PCK;
-
   pattern pattern (
       .CLK(CLK),
       .RST(RST),

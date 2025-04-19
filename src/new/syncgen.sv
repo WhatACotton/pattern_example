@@ -19,7 +19,9 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
+`ifndef SYNTHESIS
+`include "pckgen.sv"
+`endif
 module syncgen (
     input CLK,
     input RST,
